@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:the_wall/components/custom_drawer.dart';
 import 'package:the_wall/components/custom_textfield.dart';
 
@@ -8,7 +11,15 @@ class HomePage extends StatelessWidget {
 
   TextEditingController message = TextEditingController();
 
-  void postMessage() {}
+  void postMessage() {
+    String date = DateFormat.yMMMMEEEEd().format(DateTime.now());
+    FirebaseFirestore.instance.collection('posts').add({
+      'email': FirebaseAuth.instance.currentUser!.email,
+      'message': message.text,
+      'date': date,
+    });
+    message.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +52,24 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 10),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(
-                    Icons.done,
-                    color: Colors.grey.shade500,
-                    size: 25,
+                GestureDetector(
+                  onTap: () {
+                    if (message.text.isNotEmpty) {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      postMessage();
+                    }
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      Icons.done,
+                      color: Colors.grey.shade500,
+                      size: 25,
+                    ),
                   ),
                 )
               ],
