@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:the_wall/components/custom_drawer.dart';
 import 'package:the_wall/components/custom_textfield.dart';
+import 'package:the_wall/components/post_tile.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatelessWidget {
@@ -73,7 +74,14 @@ class HomePage extends StatelessWidget {
                   ),
                 )
               ],
-            )
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: ListView.builder(
+                itemCount: 10,
+                itemBuilder: (context, index) => const PostTile(),
+              ),
+            ),
           ],
         ),
       ),
