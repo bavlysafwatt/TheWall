@@ -8,32 +8,34 @@ class UserTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      padding: const EdgeInsets.all(5),
-      child: ListTile(
-        leading: Padding(
-          padding: const EdgeInsets.only(top: 4.0),
-          child: Icon(
-            Icons.person_rounded,
-            color: Colors.grey.shade800,
-            size: 30,
-          ),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey.shade200,
+          borderRadius: BorderRadius.circular(5),
         ),
-        title: Text(
-          username,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+        child: ListTile(
+          leading: Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: Icon(
+              Icons.person_rounded,
+              color: Colors.grey.shade800,
+              size: 30,
+            ),
           ),
-        ),
-        subtitle: Text(
-          email,
-          style: TextStyle(
-            color: Colors.grey.shade400,
+          title: Text(
+            username,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          subtitle: Text(
+            email,
+            style: TextStyle(
+              color: Colors.grey.shade500,
+            ),
           ),
         ),
       ),

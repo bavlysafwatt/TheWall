@@ -36,7 +36,7 @@ class PostTile extends StatelessWidget {
             child: Text(
               '${postModel.email}  •  ${getDate()}',
               style: TextStyle(
-                color: Colors.grey.shade400,
+                color: Colors.grey.shade500,
               ),
             ),
           ),
