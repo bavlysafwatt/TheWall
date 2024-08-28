@@ -1,41 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:the_wall/components/custom_button.dart';
 import 'package:the_wall/components/custom_textfield.dart';
-import 'package:the_wall/pages/register_page.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+// ignore: must_be_immutable
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
+  String? username;
+
   String? email;
 
   String? password;
 
+  String? confirmPassword;
+
   GlobalKey<FormState> formKey = GlobalKey();
 
   bool isLoading = false;
-
-  void showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: Colors.grey.shade500,
-        content: Center(
-          child: Text(
-            message,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,41 +32,61 @@ class _LoginPageState extends State<LoginPage> {
         child: Center(
           child: Form(
             key: formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: ListView(
               children: [
+                const SizedBox(height: 80),
                 const Icon(
                   Icons.person,
                   size: 70,
                   color: Colors.black,
                 ),
                 const SizedBox(height: 50),
-                Text(
-                  'Welcome back, you have been missed!',
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 16,
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Let\'s create an account for you!',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      color: Colors.grey.shade600,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 25),
                 CustomFormTextField(
                   onChanged: (value) {
-                    email = value;
+                    username = value;
+                  },
+                  hintText: 'Username',
+                  obscureText: false,
+                ),
+                const SizedBox(height: 10),
+                CustomFormTextField(
+                  onChanged: (data) {
+                    email = data;
                   },
                   hintText: 'Email',
                   obscureText: false,
                 ),
                 const SizedBox(height: 10),
                 CustomFormTextField(
-                  onChanged: (value) {
-                    password = value;
+                  onChanged: (data) {
+                    password = data;
                   },
                   hintText: 'Password',
                   obscureText: true,
                 ),
+                const SizedBox(height: 10),
+                CustomFormTextField(
+                  onChanged: (data) {
+                    confirmPassword = data;
+                  },
+                  hintText: 'Confirm Password',
+                  obscureText: true,
+                ),
                 const SizedBox(height: 25),
                 CustomButton(
-                  text: 'Login',
+                  text: 'Register',
                   onTap: () async {
                     FocusManager.instance.primaryFocus?.unfocus();
                   },
@@ -90,20 +96,20 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Not a member? ',
+                      'Already have an account? ',
                       style: TextStyle(
                         fontSize: 15,
+                        fontFamily: 'Roboto',
                         color: Colors.grey.shade600,
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const RegisterPage(),
-                      )),
+                      onTap: () => Navigator.of(context).pop(context),
                       child: Text(
-                        'Register now',
+                        'Login now',
                         style: TextStyle(
                           fontSize: 15,
+                          fontFamily: 'Roboto',
                           fontWeight: FontWeight.bold,
                           color: Colors.grey.shade600,
                         ),
