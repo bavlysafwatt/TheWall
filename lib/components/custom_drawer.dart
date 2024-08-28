@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:the_wall/pages/profile_page.dart';
+import 'package:the_wall/pages/users_page.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -33,6 +35,7 @@ class CustomDrawer extends StatelessWidget {
                       color: Colors.grey.shade800,
                     ),
                   ),
+                  onTap: () => Navigator.pop(context),
                 ),
               ),
               Padding(
@@ -49,6 +52,14 @@ class CustomDrawer extends StatelessWidget {
                       color: Colors.grey.shade800,
                     ),
                   ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const ProfilePage(),
+                      ),
+                    );
+                  },
                 ),
               ),
               Padding(
@@ -65,6 +76,14 @@ class CustomDrawer extends StatelessWidget {
                       color: Colors.grey.shade800,
                     ),
                   ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const UsersPage(),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
