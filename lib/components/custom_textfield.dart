@@ -6,11 +6,13 @@ class CustomFormTextField extends StatelessWidget {
     required this.hintText,
     required this.obscureText,
     required this.onChanged,
+    this.fillColor,
   });
 
   final String hintText;
   final bool obscureText;
   final void Function(String)? onChanged;
+  final Color? fillColor;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class CustomFormTextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
           borderSide: BorderSide(color: Colors.grey.shade500),
         ),
-        fillColor: Colors.grey.shade200,
+        fillColor: fillColor ?? Colors.grey.shade200,
         filled: true,
       ),
       cursorColor: Colors.black,

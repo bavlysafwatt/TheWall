@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                           await loginUser();
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const HomePage(),
+                              builder: (context) => HomePage(),
                             ),
                           );
                         } on FirebaseAuthException catch (e) {

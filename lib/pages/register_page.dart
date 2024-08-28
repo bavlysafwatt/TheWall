@@ -123,7 +123,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             await registerUser();
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => const HomePage(),
+                                builder: (context) => HomePage(),
                               ),
                             );
                           } on FirebaseAuthException catch (e) {
