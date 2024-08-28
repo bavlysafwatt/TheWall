@@ -13,7 +13,7 @@ class UserTile extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(6),
         ),
         child: ListTile(
           leading: Padding(
