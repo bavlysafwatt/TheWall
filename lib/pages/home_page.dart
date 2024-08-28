@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_wall/components/custom_drawer.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -13,13 +14,12 @@ class HomePage extends StatelessWidget {
         title: const Text(
           'W A L L',
           style: TextStyle(
-            fontWeight: FontWeight.bold,
             fontSize: 22,
           ),
         ),
         centerTitle: true,
       ),
-      drawer: const Drawer(),
+      drawer: const CustomDrawer(),
     );
   }
 }

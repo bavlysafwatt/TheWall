@@ -8,7 +8,6 @@ void showSnackBar(BuildContext context, String message) {
         child: Text(
           message,
           style: const TextStyle(
-            fontFamily: 'Inter',
             color: Colors.white,
             fontSize: 16,
             fontWeight: FontWeight.bold,
