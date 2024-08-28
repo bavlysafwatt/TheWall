@@ -5,14 +5,16 @@ class CustomFormTextField extends StatelessWidget {
     super.key,
     required this.hintText,
     required this.obscureText,
-    required this.onChanged,
+    this.onChanged,
     this.fillColor,
+    this.controller,
   });
 
   final String hintText;
   final bool obscureText;
   final void Function(String)? onChanged;
   final Color? fillColor;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class CustomFormTextField extends StatelessWidget {
         }
         return null;
       },
+      controller: controller,
       onChanged: onChanged,
       obscureText: obscureText,
       decoration: InputDecoration(

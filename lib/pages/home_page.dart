@@ -5,7 +5,10 @@ import 'package:the_wall/components/custom_textfield.dart';
 // ignore: must_be_immutable
 class HomePage extends StatelessWidget {
   HomePage({super.key});
-  String? postMessage;
+
+  TextEditingController message = TextEditingController();
+
+  void postMessage() {}
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +34,7 @@ class HomePage extends StatelessWidget {
               children: [
                 Expanded(
                   child: CustomFormTextField(
-                    onChanged: (value) {
-                      postMessage = value;
-                    },
+                    controller: message,
                     hintText: 'Type Something...',
                     obscureText: false,
                     fillColor: Colors.grey.shade300,
