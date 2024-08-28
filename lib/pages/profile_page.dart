@@ -57,7 +57,7 @@ class ProfilePage extends StatelessWidget {
                   Text(
                     snapshot.data!.data()!['username'],
                     style: TextStyle(
-                      fontSize: 26,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
                       color: Colors.grey.shade800,
                     ),
@@ -66,7 +66,7 @@ class ProfilePage extends StatelessWidget {
                   Text(
                     snapshot.data!.data()!['email'],
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       color: Colors.grey.shade500,
                     ),
                   ),
@@ -79,13 +79,14 @@ class ProfilePage extends StatelessWidget {
                         Text(
                           'Your Posts',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
                             color: Colors.grey.shade600,
                           ),
                         ),
                       ],
                     ),
                   ),
+                  const SizedBox(height: 5),
                   Expanded(
                     child: StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
