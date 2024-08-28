@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   const Icon(
                     Icons.person,
-                    size: 70,
+                    size: 80,
                     color: Colors.black,
                   ),
                   const SizedBox(height: 50),

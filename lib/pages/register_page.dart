@@ -60,10 +60,10 @@ class _RegisterPageState extends State<RegisterPage> {
               key: formKey,
               child: ListView(
                 children: [
-                  const SizedBox(height: 80),
+                  const SizedBox(height: 85),
                   const Icon(
                     Icons.person,
-                    size: 70,
+                    size: 80,
                     color: Colors.black,
                   ),
                   const SizedBox(height: 50),
@@ -72,7 +72,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Text(
                       'Let\'s create an account for you!',
                       style: TextStyle(
-                        fontFamily: 'Inter',
                         color: Colors.grey.shade600,
                         fontSize: 16,
                       ),
@@ -156,7 +155,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         'Already have an account? ',
                         style: TextStyle(
                           fontSize: 15,
-                          fontFamily: 'Roboto',
                           color: Colors.grey.shade600,
                         ),
                       ),
@@ -166,7 +164,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           'Login now',
                           style: TextStyle(
                             fontSize: 15,
-                            fontFamily: 'Roboto',
                             fontWeight: FontWeight.bold,
                             color: Colors.grey.shade600,
                           ),

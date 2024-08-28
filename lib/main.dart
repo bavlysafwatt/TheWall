@@ -19,6 +19,8 @@ class TheWall extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        primarySwatch: Colors.grey,
+        useMaterial3: false,
         fontFamily: 'SanFrancisco',
       ),
       home: const LoginPage(),
