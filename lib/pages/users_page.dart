@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_wall/components/user_tile.dart';
 
 class UsersPage extends StatelessWidget {
   const UsersPage({super.key});
@@ -21,6 +22,10 @@ class UsersPage extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back_ios),
         ),
+      ),
+      body: UserTile(
+        username: 'bavly',
+        email: 'bavlysafwatt@gmail.com',
       ),
     );
   }
