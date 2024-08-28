@@ -1,6 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:the_wall/components/custom_button.dart';
 import 'package:the_wall/components/custom_textfield.dart';
+import 'package:the_wall/helper_functions.dart';
 
 // ignore: must_be_immutable
 class RegisterPage extends StatefulWidget {
@@ -22,6 +26,14 @@ class _RegisterPageState extends State<RegisterPage> {
   GlobalKey<FormState> formKey = GlobalKey();
 
   bool isLoading = false;
+
+  Future<void> registerUser() async {
+    UserCredential user =
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: email!,
+      password: password!,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +101,32 @@ class _RegisterPageState extends State<RegisterPage> {
                   text: 'Register',
                   onTap: () async {
                     FocusManager.instance.primaryFocus?.unfocus();
+                    if (formKey.currentState!.validate()) {
+                      if (password == confirmPassword) {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        try {
+                          await registerUser();
+                        } on FirebaseAuthException catch (e) {
+                          if (e.code == 'weak-password') {
+                            showSnackBar(
+                                context, 'The password provided is too weak.');
+                          } else if (e.code == 'email-already-in-use') {
+                            showSnackBar(context,
+                                'The account already exists for that email.');
+                          }
+                        } catch (e) {
+                          showSnackBar(
+                              context, 'Error, please try again later!');
+                        }
+                        setState(() {
+                          isLoading = false;
+                        });
+                      } else {
+                        showSnackBar(context, 'Passwords doesn\'t match');
+                      }
+                    }
                   },
                 ),
                 const SizedBox(height: 25),

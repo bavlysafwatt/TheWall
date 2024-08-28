@@ -1,6 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:the_wall/components/custom_button.dart';
 import 'package:the_wall/components/custom_textfield.dart';
+import 'package:the_wall/helper_functions.dart';
 import 'package:the_wall/pages/register_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -19,21 +23,11 @@ class _LoginPageState extends State<LoginPage> {
 
   bool isLoading = false;
 
-  void showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: Colors.grey.shade500,
-        content: Center(
-          child: Text(
-            message,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
+  Future<void> loginUser() async {
+    UserCredential user =
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email!,
+      password: password!,
     );
   }
 
@@ -83,6 +77,32 @@ class _LoginPageState extends State<LoginPage> {
                   text: 'Login',
                   onTap: () async {
                     FocusManager.instance.primaryFocus?.unfocus();
+                    if (formKey.currentState!.validate()) {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      try {
+                        await loginUser();
+                        // Navigator.pushNamed(context, 'homePage',
+                        //     arguments: email);
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'invalid-email') {
+                          showSnackBar(
+                              context, 'No user found for that email.');
+                        } else if (e.code == 'invalid-credential') {
+                          showSnackBar(context,
+                              'Wrong credential provided for that user.');
+                        } else {
+                          showSnackBar(
+                              context, 'Can\'t login now, try again later');
+                        }
+                      } catch (e) {
+                        showSnackBar(context, 'Error, please try again later!');
+                      }
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
                   },
                 ),
                 const SizedBox(height: 25),
