@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:the_wall/components/custom_drawer.dart';
 import 'package:the_wall/components/custom_textfield.dart';
 import 'package:the_wall/components/post_tile.dart';
@@ -14,11 +13,10 @@ class HomePage extends StatelessWidget {
   TextEditingController message = TextEditingController();
 
   void postMessage() {
-    String date = DateFormat.yMMMMd().format(DateTime.now());
     FirebaseFirestore.instance.collection('posts').add({
       'email': FirebaseAuth.instance.currentUser!.email,
       'message': message.text,
-      'date': date,
+      'date': Timestamp.now(),
     });
     message.clear();
   }
@@ -40,7 +38,10 @@ class HomePage extends StatelessWidget {
       ),
       drawer: const CustomDrawer(),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('posts')
+            .orderBy('date', descending: true)
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<PostModel> postsList = [];

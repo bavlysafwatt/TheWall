@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class PostModel {
   final String email;
   final String message;
-  final String date;
+  final Timestamp date;
 
   PostModel({
     required this.email,

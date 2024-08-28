@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:the_wall/models/post_model.dart';
 
 class PostTile extends StatelessWidget {
   const PostTile({super.key, required this.postModel});
 
   final PostModel postModel;
+
+  String getDate() {
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
+        postModel.date.millisecondsSinceEpoch);
+    return DateFormat.yMMMMd().format(dateTime);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +34,7 @@ class PostTile extends StatelessWidget {
           subtitle: Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              '${postModel.email}  •  ${postModel.date}',
+              '${postModel.email}  •  ${getDate()}',
               style: TextStyle(
                 color: Colors.grey.shade400,
               ),
