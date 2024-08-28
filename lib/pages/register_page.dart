@@ -2,9 +2,11 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:the_wall/components/custom_button.dart';
 import 'package:the_wall/components/custom_textfield.dart';
 import 'package:the_wall/helper_functions.dart';
+import 'package:the_wall/pages/home_page.dart';
 
 // ignore: must_be_immutable
 class RegisterPage extends StatefulWidget {
@@ -28,8 +30,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool isLoading = false;
 
   Future<void> registerUser() async {
-    UserCredential user =
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email!,
       password: password!,
     );
@@ -37,125 +38,137 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey.shade300,
-      body: Padding(
-        padding: const EdgeInsets.all(25.0),
-        child: Center(
-          child: Form(
-            key: formKey,
-            child: ListView(
-              children: [
-                const SizedBox(height: 80),
-                const Icon(
-                  Icons.person,
-                  size: 70,
-                  color: Colors.black,
-                ),
-                const SizedBox(height: 50),
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Let\'s create an account for you!',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      color: Colors.grey.shade600,
-                      fontSize: 16,
-                    ),
+    return ModalProgressHUD(
+      inAsyncCall: isLoading,
+      color: Colors.grey.shade500,
+      progressIndicator: CircularProgressIndicator(
+        color: Colors.grey.shade600,
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.grey.shade300,
+        body: Padding(
+          padding: const EdgeInsets.all(25.0),
+          child: Center(
+            child: Form(
+              key: formKey,
+              child: ListView(
+                children: [
+                  const SizedBox(height: 80),
+                  const Icon(
+                    Icons.person,
+                    size: 70,
+                    color: Colors.black,
                   ),
-                ),
-                const SizedBox(height: 25),
-                CustomFormTextField(
-                  onChanged: (value) {
-                    username = value;
-                  },
-                  hintText: 'Username',
-                  obscureText: false,
-                ),
-                const SizedBox(height: 10),
-                CustomFormTextField(
-                  onChanged: (data) {
-                    email = data;
-                  },
-                  hintText: 'Email',
-                  obscureText: false,
-                ),
-                const SizedBox(height: 10),
-                CustomFormTextField(
-                  onChanged: (data) {
-                    password = data;
-                  },
-                  hintText: 'Password',
-                  obscureText: true,
-                ),
-                const SizedBox(height: 10),
-                CustomFormTextField(
-                  onChanged: (data) {
-                    confirmPassword = data;
-                  },
-                  hintText: 'Confirm Password',
-                  obscureText: true,
-                ),
-                const SizedBox(height: 25),
-                CustomButton(
-                  text: 'Register',
-                  onTap: () async {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    if (formKey.currentState!.validate()) {
-                      if (password == confirmPassword) {
-                        setState(() {
-                          isLoading = true;
-                        });
-                        try {
-                          await registerUser();
-                        } on FirebaseAuthException catch (e) {
-                          if (e.code == 'weak-password') {
-                            showSnackBar(
-                                context, 'The password provided is too weak.');
-                          } else if (e.code == 'email-already-in-use') {
-                            showSnackBar(context,
-                                'The account already exists for that email.');
-                          }
-                        } catch (e) {
-                          showSnackBar(
-                              context, 'Error, please try again later!');
-                        }
-                        setState(() {
-                          isLoading = false;
-                        });
-                      } else {
-                        showSnackBar(context, 'Passwords doesn\'t match');
-                      }
-                    }
-                  },
-                ),
-                const SizedBox(height: 25),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Already have an account? ',
+                  const SizedBox(height: 50),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Let\'s create an account for you!',
                       style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: 'Roboto',
+                        fontFamily: 'Inter',
                         color: Colors.grey.shade600,
+                        fontSize: 16,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () => Navigator.of(context).pop(context),
-                      child: Text(
-                        'Login now',
+                  ),
+                  const SizedBox(height: 25),
+                  CustomFormTextField(
+                    onChanged: (value) {
+                      username = value;
+                    },
+                    hintText: 'Username',
+                    obscureText: false,
+                  ),
+                  const SizedBox(height: 10),
+                  CustomFormTextField(
+                    onChanged: (data) {
+                      email = data;
+                    },
+                    hintText: 'Email',
+                    obscureText: false,
+                  ),
+                  const SizedBox(height: 10),
+                  CustomFormTextField(
+                    onChanged: (data) {
+                      password = data;
+                    },
+                    hintText: 'Password',
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 10),
+                  CustomFormTextField(
+                    onChanged: (data) {
+                      confirmPassword = data;
+                    },
+                    hintText: 'Confirm Password',
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 25),
+                  CustomButton(
+                    text: 'Register',
+                    onTap: () async {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      if (formKey.currentState!.validate()) {
+                        if (password == confirmPassword) {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          try {
+                            await registerUser();
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const HomePage(),
+                              ),
+                            );
+                          } on FirebaseAuthException catch (e) {
+                            if (e.code == 'weak-password') {
+                              showSnackBar(context,
+                                  'The password provided is too weak.');
+                            } else if (e.code == 'email-already-in-use') {
+                              showSnackBar(context,
+                                  'The account already exists for that email.');
+                            }
+                          } catch (e) {
+                            showSnackBar(
+                                context, 'Error, please try again later!');
+                          }
+                          setState(() {
+                            isLoading = false;
+                          });
+                        } else {
+                          showSnackBar(context, 'Passwords doesn\'t match');
+                        }
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 25),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Already have an account? ',
                         style: TextStyle(
                           fontSize: 15,
                           fontFamily: 'Roboto',
-                          fontWeight: FontWeight.bold,
                           color: Colors.grey.shade600,
                         ),
                       ),
-                    ),
-                  ],
-                )
-              ],
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).pop(context),
+                        child: Text(
+                          'Login now',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
