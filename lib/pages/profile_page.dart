@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:the_wall/components/post_tile.dart';
+import 'package:the_wall/models/post_model.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -70,7 +72,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
                   Padding(
-                    padding: const EdgeInsets.only(left: 30.0),
+                    padding: const EdgeInsets.only(left: 16.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -78,13 +80,60 @@ class ProfilePage extends StatelessWidget {
                           'Your Posts',
                           style: TextStyle(
                             fontSize: 18,
-                            fontWeight: FontWeight.bold,
                             color: Colors.grey.shade600,
                           ),
                         ),
                       ],
                     ),
                   ),
+                  Expanded(
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('posts')
+                          .orderBy('date', descending: true)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          List<PostModel> postsList = [];
+                          for (int i = 0; i < snapshot.data!.docs.length; i++) {
+                            if (snapshot.data!.docs[i]['email'] ==
+                                FirebaseAuth.instance.currentUser!.email) {
+                              postsList.add(
+                                  PostModel.fromJson(snapshot.data!.docs[i]));
+                            }
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            child: ListView.builder(
+                              itemCount: postsList.length,
+                              itemBuilder: (context, index) => PostTile(
+                                postModel: postsList[index],
+                              ),
+                            ),
+                          );
+                        } else if (snapshot.hasError) {
+                          return const Center(
+                            child: Text(
+                              'There was an error, please try again later!',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.grey.shade600,
+                              backgroundColor: Colors.grey.shade500,
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  )
                 ],
               ),
             );

@@ -43,7 +43,6 @@ class UsersPage extends StatelessWidget {
               child: Text(
                 'There was an error, please try again later!',
                 style: TextStyle(
-                  fontFamily: 'Inter',
                   color: Colors.black,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
