@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:the_wall/models/post_model.dart';
 
 class PostTile extends StatelessWidget {
-  const PostTile({super.key});
+  const PostTile({super.key, required this.postModel});
+
+  final PostModel postModel;
 
   @override
   Widget build(BuildContext context) {
@@ -14,9 +17,9 @@ class PostTile extends StatelessWidget {
         ),
         padding: const EdgeInsets.all(12),
         child: ListTile(
-          title: const Text(
-            'FIRST POST!!',
-            style: TextStyle(
+          title: Text(
+            postModel.message,
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
@@ -24,7 +27,7 @@ class PostTile extends StatelessWidget {
           subtitle: Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              'bavlysafwatt@gmail.com • 28/8/2024',
+              '${postModel.email}  •  ${postModel.date}',
               style: TextStyle(
                 color: Colors.grey.shade400,
               ),

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:the_wall/components/custom_drawer.dart';
 import 'package:the_wall/components/custom_textfield.dart';
 import 'package:the_wall/components/post_tile.dart';
+import 'package:the_wall/models/post_model.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatelessWidget {
@@ -13,7 +14,7 @@ class HomePage extends StatelessWidget {
   TextEditingController message = TextEditingController();
 
   void postMessage() {
-    String date = DateFormat.yMMMMEEEEd().format(DateTime.now());
+    String date = DateFormat.yMMMMd().format(DateTime.now());
     FirebaseFirestore.instance.collection('posts').add({
       'email': FirebaseAuth.instance.currentUser!.email,
       'message': message.text,
@@ -38,52 +39,84 @@ class HomePage extends StatelessWidget {
         centerTitle: true,
       ),
       drawer: const CustomDrawer(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: CustomFormTextField(
-                    controller: message,
-                    hintText: 'Type Something...',
-                    obscureText: false,
-                    fillColor: Colors.grey.shade300,
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<PostModel> postsList = [];
+            for (int i = 0; i < snapshot.data!.docs.length; i++) {
+              postsList.add(PostModel.fromJson(snapshot.data!.docs[i]));
+            }
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomFormTextField(
+                          controller: message,
+                          hintText: 'Type Something...',
+                          obscureText: false,
+                          fillColor: Colors.grey.shade300,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      GestureDetector(
+                        onTap: () {
+                          if (message.text.isNotEmpty) {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            postMessage();
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade200,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            Icons.done,
+                            color: Colors.grey.shade500,
+                            size: 25,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                ),
-                const SizedBox(width: 10),
-                GestureDetector(
-                  onTap: () {
-                    if (message.text.isNotEmpty) {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                      postMessage();
-                    }
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Icon(
-                      Icons.done,
-                      color: Colors.grey.shade500,
-                      size: 25,
+                  const SizedBox(height: 20),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: postsList.length,
+                      itemBuilder: (context, index) => PostTile(
+                        postModel: postsList[index],
+                      ),
                     ),
                   ),
-                )
-              ],
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                itemCount: 10,
-                itemBuilder: (context, index) => const PostTile(),
+                ],
               ),
-            ),
-          ],
-        ),
+            );
+          } else if (snapshot.hasError) {
+            return const Center(
+              child: Text(
+                'There was an error, please try again later!',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(
+                color: Colors.grey.shade600,
+                backgroundColor: Colors.grey.shade500,
+              ),
+            );
+          }
+        },
       ),
     );
   }
