@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:the_wall/components/post_tile.dart';
+import 'package:the_wall/components/profile_post_tile.dart';
 import 'package:the_wall/models/post_model.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -108,7 +108,15 @@ class ProfilePage extends StatelessWidget {
                                 horizontal: 16, vertical: 8),
                             child: ListView.builder(
                               itemCount: postsList.length,
-                              itemBuilder: (context, index) => PostTile(
+                              itemBuilder: (context, index) => ProfilePostTile(
+                                onPressed: () async {
+                                  await FirebaseFirestore.instance
+                                      .runTransaction(
+                                          (Transaction myTransaction) async {
+                                    myTransaction.delete(
+                                        snapshot.data!.docs[index].reference);
+                                  });
+                                },
                                 postModel: postsList[index],
                               ),
                             ),
