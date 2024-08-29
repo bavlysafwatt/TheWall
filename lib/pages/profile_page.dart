@@ -109,14 +109,6 @@ class ProfilePage extends StatelessWidget {
                             child: ListView.builder(
                               itemCount: postsList.length,
                               itemBuilder: (context, index) => ProfilePostTile(
-                                onPressed: () async {
-                                  await FirebaseFirestore.instance
-                                      .runTransaction(
-                                          (Transaction myTransaction) async {
-                                    myTransaction.delete(
-                                        snapshot.data!.docs[index].reference);
-                                  });
-                                },
                                 postModel: postsList[index],
                               ),
                             ),
