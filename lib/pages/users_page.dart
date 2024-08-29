@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:the_wall/components/user_tile.dart';
 
@@ -28,13 +29,23 @@ class UsersPage extends StatelessWidget {
         stream: FirebaseFirestore.instance.collection('users').snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            List<List<String>> usersList = [];
+            for (int i = 0; i < snapshot.data!.docs.length; i++) {
+              if (snapshot.data!.docs[i]['email'] !=
+                  FirebaseAuth.instance.currentUser!.email) {
+                usersList.add([
+                  snapshot.data!.docs[i]['username'],
+                  snapshot.data!.docs[i]['email']
+                ]);
+              }
+            }
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: ListView.builder(
-                itemCount: snapshot.data!.docs.length,
+                itemCount: usersList.length,
                 itemBuilder: (context, index) => UserTile(
-                  username: snapshot.data!.docs[index]['username'],
-                  email: snapshot.data!.docs[index]['email'],
+                  username: usersList[index][0],
+                  email: usersList[index][1],
                 ),
               ),
             );
