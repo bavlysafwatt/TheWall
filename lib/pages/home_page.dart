@@ -17,6 +17,7 @@ class HomePage extends StatelessWidget {
       'email': FirebaseAuth.instance.currentUser!.email,
       'message': message.text,
       'date': Timestamp.now(),
+      'likes': [],
     });
     message.clear();
   }
@@ -46,7 +47,29 @@ class HomePage extends StatelessWidget {
           if (snapshot.hasData) {
             List<PostModel> postsList = [];
             for (int i = 0; i < snapshot.data!.docs.length; i++) {
-              postsList.add(PostModel.fromJson(snapshot.data!.docs[i]));
+              var doc = snapshot.data!.docs[i];
+              postsList.add(
+                PostModel.fromJson(
+                  snapshot.data!.docs[i],
+                  onPressed: () {
+                    var docRef = FirebaseFirestore.instance
+                        .collection('posts')
+                        .doc(doc.id);
+                    if ((doc['likes'] as List)
+                        .contains(FirebaseAuth.instance.currentUser!.email)) {
+                      docRef.update({
+                        'likes': FieldValue.arrayRemove(
+                            [FirebaseAuth.instance.currentUser!.email])
+                      });
+                    } else {
+                      docRef.update({
+                        'likes': FieldValue.arrayUnion(
+                            [FirebaseAuth.instance.currentUser!.email])
+                      });
+                    }
+                  },
+                ),
+              );
             }
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -91,6 +114,10 @@ class HomePage extends StatelessWidget {
                       itemCount: postsList.length,
                       itemBuilder: (context, index) => PostTile(
                         postModel: postsList[index],
+                        filled: postsList[index]
+                            .likes
+                            .contains(FirebaseAuth.instance.currentUser!.email),
+                        likes: postsList[index].likes.length,
                       ),
                     ),
                   ),
