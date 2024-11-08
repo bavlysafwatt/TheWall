@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:the_wall/components/likes_section.dart';
 import 'package:the_wall/models/post_model.dart';
 
 class PostTile extends StatelessWidget {
@@ -50,30 +51,10 @@ class PostTile extends StatelessWidget {
                 ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: postModel.onPressed,
-                  icon: filled == true
-                      ? Image.asset(
-                          'assets/images/filled_heart.png',
-                          width: 25,
-                          height: 25,
-                        )
-                      : Image.asset(
-                          'assets/images/outlined_heart.png',
-                          width: 25,
-                          height: 25,
-                        ),
-                ),
-                Text(
-                  '$likes',
-                  style: TextStyle(
-                    color: Colors.grey.shade500,
-                  ),
-                ),
-              ],
+            LikesSection(
+              onPressed: postModel.onPressed,
+              filled: filled,
+              likes: likes,
             ),
           ],
         ),

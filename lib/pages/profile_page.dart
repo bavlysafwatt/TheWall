@@ -97,10 +97,32 @@ class ProfilePage extends StatelessWidget {
                         if (snapshot.hasData) {
                           List<PostModel> postsList = [];
                           for (int i = 0; i < snapshot.data!.docs.length; i++) {
+                            var doc = snapshot.data!.docs[i];
                             if (snapshot.data!.docs[i]['email'] ==
                                 FirebaseAuth.instance.currentUser!.email) {
-                              postsList.add(
-                                  PostModel.fromJson(snapshot.data!.docs[i]));
+                              postsList.add(PostModel.fromJson(
+                                snapshot.data!.docs[i],
+                                onPressed: () {
+                                  var docRef = FirebaseFirestore.instance
+                                      .collection('posts')
+                                      .doc(doc.id);
+                                  if ((doc['likes'] as List).contains(
+                                      FirebaseAuth
+                                          .instance.currentUser!.email)) {
+                                    docRef.update({
+                                      'likes': FieldValue.arrayRemove([
+                                        FirebaseAuth.instance.currentUser!.email
+                                      ])
+                                    });
+                                  } else {
+                                    docRef.update({
+                                      'likes': FieldValue.arrayUnion([
+                                        FirebaseAuth.instance.currentUser!.email
+                                      ])
+                                    });
+                                  }
+                                },
+                              ));
                             }
                           }
                           return Padding(
@@ -110,6 +132,9 @@ class ProfilePage extends StatelessWidget {
                               itemCount: postsList.length,
                               itemBuilder: (context, index) => ProfilePostTile(
                                 postModel: postsList[index],
+                                filled: postsList[index].likes.contains(
+                                    FirebaseAuth.instance.currentUser!.email),
+                                likes: postsList[index].likes.length,
                               ),
                             ),
                           );
